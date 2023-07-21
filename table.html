@@ -1,0 +1,105 @@
+<style>
+  .d-none {
+      display: none;
+  }
+
+  table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+      padding: 20px;
+      table-layout: fixed;
+  }
+</style>
+
+<div class="cmp-table" data-sly-use.model="com.thermofisher.wcm.corpcommons.core.models.Table"
+  data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+  data-sly-test.notEmpty="${model.columns.size != 0}">
+  <div data-sly-test.editMode="${wcmmode.edit}">
+      <table>
+          <thead data-sly-list="${model.columns}">
+              <th>${item.columnname}</th>
+          </thead>
+          <div class="cmp-search" data-sly-test="${properties.searchable}">
+              <input id="keywordId" name="keyword" value="" />
+          </div>
+      </table>
+      <div data-sly-resource="${ resource @ resourceType='wcm/foundation/components/responsivegrid'}"></div>
+  </div>
+  <div data-sly-test="${!editMode}" class="pragma-data-table" data-paginate-per-page="${properties.pagevalue}"
+      data-paginate="${properties.pagination}" data-searchable="${properties.searchable}"
+      data-filterable="${properties.filterable}">
+      <div class="table-search cmp-table__search-container" data-sly-test="${properties.searchable}">
+          <span class="filter-icon" data-sly-test="${properties.filterable}"></span>
+          <input colspan=${properties.columnname.lenght} class="search-field cmp-table__search-field" id="search-field" name="query" value="">
+      </div>
+      <div class="table-filter d-none cmp-table__filter-container">
+          <span data-sly-test="${model.filterable}" data-sly-list.group="${model.filterGroupList}" >
+              <div class="dropdown cmp-form-options__field cmp-form-options__field--multi-drop-down"
+                      style="display: inline-block;" style="display: inline-block;">
+                  <span class="current"></span>
+                  <div class="list">
+                      <ul data-sly-list ="${group.filtervalues}" name="per-page" >
+                          <li class="option" data-sly-test="${itemList.first}" value="">${group.filterGroupName}</li>
+                          <li class="option-li" data-value="${item.filtervalue}">${item.filtervalue}</option>
+          </ul>                      
+                  </div>
+              </div>
+          </span>
+          <div class="filter-value"></div>
+      </div>
+      <table data-paginate-per-page="${properties.pagevalue}"
+          data-paginate="${properties.pagination}" data-searchable="${properties.searchable}"
+          data-filterable="${properties.filterable}">
+          <thead>
+              <tr class="table-headers">
+                  <div data-sly-list="${model.columns}">
+                      <th
+                          data-type="${item.columntype=='number' ? 'number': false}"
+                          data-sortable="${item.sortable}"
+                          class="${item.sortable ? 'sorted-asc' : ''}"
+                      ><span>${item.columnname}</span></th>
+                  </div>
+               </tr>   
+          </thead>
+          <sly data-sly-resource="${ resource @ resourceType='wcm/foundation/components/responsivegrid'}" />
+
+          <tfoot>
+              <tr class="pagination-row">
+                  <td colspan="3">
+                      <div class="pagination-container">
+                          <div class="pagination-per-page">Results per page:
+                              <select name="per-page" class="pagination-per-page-value">
+                                  <option value="15">15</option>
+                                  <option value="30">30</option>
+                                  <option value="45">45</option>
+                              </select>
+                              <span class="pagination-range"> of 16</span>
+                          </div>
+                          <div class="pagination-description">
+                              <span class="pagination-link">
+                                  <span class="icon-button prev" disable=""></span>
+                                  <span class="page-num">
+                                      <a class="pagination-number active" page-index="1" aria-label="Page 1">1</a>
+                                      <a class="pagination-number" page-index="2" aria-label="Page 2">2</a>
+                                      <a class="pagination-number" page-index="2" aria-label="Page 2">3</a>
+                                      <a class="pagination-number" page-index="2" aria-label="Page 2">4</a>
+                                      <a class="pagination-number" page-index="2" aria-label="Page 2">5</a>
+                                  </span>
+                                  <span class="icon-button next"></span>
+                              </span>
+                          </div>
+                      </div>
+                  </td>
+              </tr>
+          </tfoot>
+
+      </table>
+      <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html">
+          <sly data-sly-call="${clientlib.js @ categories='header.utilities', priority='1'}" />
+          <sly data-sly-call="${clientlib.js @ categories='corpcommons.table', priority='0'}" />
+      </sly>
+  </div>
+</div>
+<sly data-sly-call="${templates.placeholder @ isEmpty = !notEmpty}"></sly>
+
